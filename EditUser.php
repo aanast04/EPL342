@@ -13,7 +13,54 @@
 		//header('Location: index.php');
 		//die();
 	}
+
+	$sql = "SELECT * FROM USER";
+	$get_info = 
+
+	function getDate(){
+		$data = array();
+		$data[1] = $_POST['Password'];
+		$data[2] = $_POST['UserName'];
+		$data[3] = $_POST['ID'];
+		$data[4] = $_POST['Sex'];
+		$data[5] = $_POST['Date_Of_Birth'];
+		$data[6] = $_POST['Name'];
+		$data[7] = $_POST['Type'];
+	}
 ?>
+<!DOCTYPE html>
+<html>
+<body>
+
+  <div class="Edit">
+    <h1>Edit User</h1>
+    <hr>
+
+    <label for="username"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="username" id="username"><br>
+    <label for="password"><b>Password</b></label>
+    <input type="text" placeholder="Enter password" name="password" id="password"><br>
+    <label for="ID"><b>ID</b></label>
+    <input type="number" placeholder="Enter ID" name="id" id="id"><br>
+    <label for="Sex"><b>Sex</b></label>
+    <input type="text" placeholder="Enter Sex" name="Sex" id="sex"><br>
+    <label for="Date_of_Birth"><b>Date of Birth</b></label>
+    <input type="date" placeholder="Enter Date of Birth" name="dateofbirth" id="dateofbirth"><br>
+    <label for="name"><b>Name</b></label>
+    <input type="text" placeholder="Enter Full Name" name="name" id="name"><br>
+    <label for="type"><b>Type</b></label>
+    <input type="number" placeholder="Enter Type" name="type" id="type" min="1" max="3"><br>
+
+    <button type="submit" class="finish">Finish</button>
+  </div>
+ 
+</form>
+<form method="post">
+		<input type="submit" name="disconnect" value="Disconnect"/>
+		<input type="submit" value="Menu" formaction="connect.php">
+	</form>
+</body>
+</html>
 
 <?php
 	echo "Connecting to SQL server (" . $serverName . ")<br/>";
@@ -39,24 +86,6 @@
 
 	/* Free connection resources. */
 	sqlsrv_close( $conn);
-
-	/*
-	function PrintResultSet ($resultSet) {
-		while ($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)) {
-			$newRow = true;
-			foreach($row as $col){
-				if ($newRow) {
-					$newRow = false;
-					echo (is_null($col) ? "Null" : $col);
-				} else {
-					echo (", ".(is_null($col) ? "Null" : $col));
-				}
-			}
-			echo("<br/>");
-		}
-		echo ("<table><tr><td>---</td></tr></table>");
-	}
-	*/
 
 	function PrintResultSet ($resultSet) {
 		echo ("<table><tr >");
@@ -102,11 +131,3 @@
 			die('<meta http-equiv="refresh" content="1; url=index.php" />');
 		}
 	?>
-
-	<form method="post">
-		<input type="submit" name="disconnect" value="Disconnect"/>
-		<input type="submit" value="Menu" formaction="connect.php">
-	</form>
-
-</body>
-</html>

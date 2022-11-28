@@ -22,6 +22,7 @@
 	Database: <input type="text" name="dbName"><br>
     Username: <input type="text" name="userName"><br>
     Password: <input type="password" name="pswd"><br>
+	9yCDJQQV
     <input type="submit" name="connect"> 
     </form>
 </body>
