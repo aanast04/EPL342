@@ -19,7 +19,9 @@
       </table>
   	<hr>
   	<a>Query 1 </a><br>
-	  <a href="InsertUser.php">Insert User</a>
+	  <a href="InsertUser.php">Insert User</a><b>
+	  <a href="EditUser.php">Edit User</a><b>
+	  <a href="ViewUser.php">View User</a><br>
   	<a href="q2.php">Query 2 </a><br>
   	<a> Query 3 </a><br>
   	<form action="q3.php" method="post">
