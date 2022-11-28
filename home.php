@@ -18,7 +18,12 @@
   	</tr>
       </table>
   	<hr>
-  	<a href="q1.php">Query 1 </a><br>
+  	<a>Query 1 </a><br>
+	<a href="InsertUser.php"> 
+	  <form action="InsertUser.php" method="post">
+	  <form action="EdittUser.php" method="post">
+	  <form action="InsertUser.php" method="post">
+  	</form><br>
   	<a href="q2.php">Query 2 </a><br>
   	<a> Query 3 </a><br>
   	<form action="q3.php" method="post">
