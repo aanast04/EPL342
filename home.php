@@ -18,22 +18,9 @@
   	</tr>
       </table>
   	<hr>
-  	<a>Query 1 </a><br>
-	  <a href="InsertUser.php">Insert User</a><br><br>
-	  <a>Edit </a>
-	  <form action="EditUser.php" method="post">
-  		</a>(Edit User's information)
-  		Username: <input type="text" name="username" placeholder = "Username">
-  		<input type="submit" name="Query 1 Edit">
-  	</form><br>
-	  <a href="ViewUser.php">View User</a><br><br>
-  	<a href="q2.php">Query 2 </a><br>
-  	<a> Query 3 </a><br>
-  	<form action="q3.php" method="post">
-  		(Calling a stored procedure with parameters)</a><br>
-  		Parameter: <input type="text" name="city" value="Seattle">
-  		<input type="submit" name="Query 3">
-  	</form>
+  	
+	<a href="q1_InsertUser.php">Query 1 (Insert User)</a><br>
+	<a href="q1_ViewUser.php">Query 1 (View Users)</a><br>
   	<a href="q4.php">Query 4 </a><br>
   	<a href="q5.php">Query 5 </a><br>
   	<a href="q6.php">Query 6 </a><br>
