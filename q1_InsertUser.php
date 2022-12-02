@@ -136,8 +136,8 @@ if(isset($_POST['Query1_Insert_User'])) {
 		 First Name: <input type="text" name="FName_Insertq1" maxlength="40" required> &nbsp
 			Type: <select name="type_Insertq1" >
 				<option value='3' selected="selected">User</option>
-				 <option value='2'>LocationMap </option>
-				 <option value='1' >Admin</option>
+				 <option value='2'>LocationMap Admin</option>
+				 <option value='1' >System Admin</option>
 			 </select>
 
 			 <br> <br><input type="submit" name="Query1_Insert_User"/>

@@ -15,6 +15,7 @@
 	}
 ?>
 
+
 <html>
 <head>
 	<style>
@@ -36,6 +37,7 @@
 	</tr>
     </table>
 	<hr>
+  <h2>View Users</h2>
 
 	<?php
 	echo "Connecting to SQL server (" . $serverName . ")<br/>";
@@ -45,26 +47,41 @@
 	//Establishes the connection
 	$conn = sqlsrv_connect($serverName, $connectionOptions);
 
-	//Read Stored proc with param
-	$tsql = "{call Q17(?)}";
-	//echo "Executing query: " . $tsql . ") with parameter " . $_POST["fingerprint_q13"] . "<br/>";
+	//Read Query
 
-	// Getting parameter from the http call and setting it for the SQL call
-	$params = array(
-			array($_POST["Building_Code_q17"], SQLSRV_PARAM_IN),
-					);
+	$tsql=   "{call Q1View}";
 
-	$getResults= sqlsrv_query($conn, $tsql, $params);
-	echo ("Results:<br/>");
+	echo "Executing query: " . $tsql . ") without any parameter<br/>";
+	$getResults= sqlsrv_query($conn, $tsql);
+	echo "Results:<br/>";
 	if ($getResults == FALSE)
 		die(FormatErrors(sqlsrv_errors()));
 
 	PrintResultSet($getResults);
+
 	/* Free query  resources. */
 	sqlsrv_free_stmt($getResults);
 
 	/* Free connection resources. */
 	sqlsrv_close( $conn);
+
+	/*
+	function PrintResultSet ($resultSet) {
+		while ($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)) {
+			$newRow = true;
+			foreach($row as $col){
+				if ($newRow) {
+					$newRow = false;
+					echo (is_null($col) ? "Null" : $col);
+				} else {
+					echo (", ".(is_null($col) ? "Null" : $col));
+				}
+			}
+			echo("<br/>");
+		}
+		echo ("<table><tr><td>---</td></tr></table>");
+	}
+	*/
 
 	function PrintResultSet ($resultSet) {
 		echo ("<table><tr >");
@@ -74,16 +91,31 @@
 			echo $fieldMetadata["Name"];
 			echo ("</th>");
 		}
+
+		echo("<th>Edit</th>");
 		echo ("</tr>");
+
 
 		while ($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)) {
 			echo ("<tr>");
+  
 			foreach($row as $col){
+
 				echo ("<td>");
 				echo (is_null($col) ? "Null" : $col);
 				echo ("</td>");
 			}
-			echo ("</tr>");
+			//esu ta evales
+   	        $UserName_edit = $row['UserName'];
+		$Password = $row['Password'];
+		$ID	  = $row['ID'];
+		$Sex      = $row['Sex'];
+		$Date= $row['Date of Birth'];
+		$Last_Name     = $row['Last Name'];
+		$First_Name    = $row['First Name'];
+		$Role          =$row['Role'];
+           	echo("<td><a href='q1_EditUser.php?GetU=$UserName_edit&GetP=$Password&GetID=$ID&GetS=$Sex&GetD=$Date&GetL=$Last_Name&GetF=$First_Name&GetR=$Role' >Edit</a></td>");//esu to evales
+
 		}
 		echo ("</table>");
 	}
@@ -101,7 +133,6 @@
 	}
 
 	?>
-
 	<hr>
 	<?php
 		if(isset($_POST['disconnect'])) {
@@ -114,7 +145,7 @@
 
 	<form method="post">
 		<input type="submit" name="disconnect" value="Disconnect"/>
-		<input type="submit" value="Menu" formaction="home.php">
+		<input type="submit" value="Menu" formaction="connect.php">
 	</form>
 
 </body>

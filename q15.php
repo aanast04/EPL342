@@ -128,7 +128,7 @@
 
 	<form method="post">
 		<input type="submit" name="disconnect" value="Disconnect"/>
-		<input type="submit" value="Menu" formaction="connect.php">
+		<input type="submit" value="Menu" formaction="home.php">
 	</form>
 
 </body>

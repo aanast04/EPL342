@@ -13,7 +13,9 @@
 		//header('Location: index.php');
 		//die();
 	}
+  $FID = $_GET['GetID'];
 ?>
+
 
 <html>
 <head>
@@ -36,6 +38,7 @@
 	</tr>
     </table>
 	<hr>
+  <h2>View Fingerprints</h2>
 
 	<?php
 	echo "Connecting to SQL server (" . $serverName . ")<br/>";
@@ -45,26 +48,42 @@
 	//Establishes the connection
 	$conn = sqlsrv_connect($serverName, $connectionOptions);
 
-	//Read Stored proc with param
-	$tsql = "{call Q17(?)}";
-	//echo "Executing query: " . $tsql . ") with parameter " . $_POST["fingerprint_q13"] . "<br/>";
+	//Read Query
 
-	// Getting parameter from the http call and setting it for the SQL call
-	$params = array(
-			array($_POST["Building_Code_q17"], SQLSRV_PARAM_IN),
-					);
+	$tsql=   "SELECT * FROM [Object] O INNER JOIN [FINGERPRINT] F ON O.FingerprintID=F.FingerprintID  WHERE $FID = F.FingerprintID";
 
-	$getResults= sqlsrv_query($conn, $tsql, $params);
-	echo ("Results:<br/>");
+
+	//echo "Executing query: " . $tsql . ") without any parameter<br/>";
+	$getResults= sqlsrv_query($conn, $tsql);
+	echo "Results:<br/>";
 	if ($getResults == FALSE)
 		die(FormatErrors(sqlsrv_errors()));
 
 	PrintResultSet($getResults);
+
 	/* Free query  resources. */
 	sqlsrv_free_stmt($getResults);
 
 	/* Free connection resources. */
 	sqlsrv_close( $conn);
+
+	/*
+	function PrintResultSet ($resultSet) {
+		while ($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)) {
+			$newRow = true;
+			foreach($row as $col){
+				if ($newRow) {
+					$newRow = false;
+					echo (is_null($col) ? "Null" : $col);
+				} else {
+					echo (", ".(is_null($col) ? "Null" : $col));
+				}
+			}
+			echo("<br/>");
+		}
+		echo ("<table><tr><td>---</td></tr></table>");
+	}
+	*/
 
 	function PrintResultSet ($resultSet) {
 		echo ("<table><tr >");
@@ -74,16 +93,27 @@
 			echo $fieldMetadata["Name"];
 			echo ("</th>");
 		}
+
+		echo("<th>View Objects</th>");
 		echo ("</tr>");
+
 
 		while ($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)) {
 			echo ("<tr>");
+
 			foreach($row as $col){
+
 				echo ("<td>");
 				echo (is_null($col) ? "Null" : $col);
 				echo ("</td>");
 			}
-			echo ("</tr>");
+			//esu ta evales
+
+		$OID= $row['ObjectID'];
+
+           	echo("<td><a href='q1_DeleteObject.php?GetID=$OID' >Delete Objects</a></td>");//esu to evales
+            echo("<td><a href='q1_InsertObject.php?GetID= $FID ' >Insert Objects</a></td>");//esu to evales
+
 		}
 		echo ("</table>");
 	}
@@ -101,7 +131,6 @@
 	}
 
 	?>
-
 	<hr>
 	<?php
 		if(isset($_POST['disconnect'])) {
@@ -114,7 +143,7 @@
 
 	<form method="post">
 		<input type="submit" name="disconnect" value="Disconnect"/>
-		<input type="submit" value="Menu" formaction="home.php">
+		<input type="submit" value="Menu" formaction="connect.php">
 	</form>
 
 </body>

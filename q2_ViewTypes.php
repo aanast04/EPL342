@@ -37,7 +37,7 @@
 	</tr>
     </table>
 	<hr>
-  <h2>View Users</h2>
+  <h2>View Types</h2>
 
 	<?php
 	echo "Connecting to SQL server (" . $serverName . ")<br/>";

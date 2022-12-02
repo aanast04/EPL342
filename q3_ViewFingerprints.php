@@ -37,7 +37,7 @@
 	</tr>
     </table>
 	<hr>
-  <h2>View Users</h2>
+  <h2>View Fingerprints</h2>
 
 	<?php
 	echo "Connecting to SQL server (" . $serverName . ")<br/>";
@@ -49,9 +49,9 @@
 
 	//Read Query
 
-	$tsql=   "SELECT * FROM Fingerprint";
+	$tsql=   "EXEC Q3ViewFingerpint";
 
-	echo "Executing query: " . $tsql . ") without any parameter<br/>";
+	//echo "Executing query: " . $tsql . ") without any parameter<br/>";
 	$getResults= sqlsrv_query($conn, $tsql);
 	echo "Results:<br/>";
 	if ($getResults == FALSE)
@@ -92,8 +92,7 @@
 			echo ("</th>");
 		}
 
-		echo("<th>Edit</th>");
-    echo("<th>Delete</th>");
+		echo("<th>View Objects</th>");
 		echo ("</tr>");
 
 
@@ -107,17 +106,10 @@
 				echo ("</td>");
 			}
 			//esu ta evales
-   	$Date_Of_Register = $row['Date_Of_Register'];
-		$X = $row['X'];
-		$Y= $row['Y'];
-		$Floor= $row['Floor'];
+
 		$FID= $row['FingerprintID'];
-    $User_entry = $row['User entry'];
 
-
-           	echo("<td><a href='q1_EditFingerprint.php?GetU=$UserName_edit&GetP=$Password&GetID=$ID&GetS=$Sex&GetD=$Date&GetL=$Last_Name&GetF=$First_Name&GetR=$Role' >Edit</a></td>");//esu to evales
-            echo("<td><a href='q1_DeleteFingerprint.php'>Edit</a></td>");//esu to evales
-
+           	echo("<td><a href='q1_ViewObjects.php?GetID=$FID' >Find Objects</a></td>");//esu to evales
 
 		}
 		echo ("</table>");

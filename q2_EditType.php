@@ -60,13 +60,24 @@ if(isset($_POST['updateType'])) {
 
   $tsql = "{call Q2EditType(?,?,?,?,?)}";
 
+//vres to id tou user sumfwna me to password
+	$pass= $_SESSION["pas"];
+	$params1 = array( $pass );
+	$user_entry = sqlsrv_query($conn,"SELECT U.Seq_Num FROM [User] U WHERE U.Password=?;",$params1);
+
+	while ($row1 = sqlsrv_fetch_array($user_entry, SQLSRV_FETCH_ASSOC)) {
+		$Seq_num = $row1['Seq_Num'];
+	}
+
+
    // Getting parameter from the http call and setting it for the SQL call
  	 $params = array(
       array($_POST["title_q2edit"], SQLSRV_PARAM_IN),
  	   array($_POST["model_q2edit"], SQLSRV_PARAM_IN),
  		 array($_POST["id_q2edit"], SQLSRV_PARAM_IN),
- 		 array($UID, SQLSRV_PARAM_IN),
-     array($selected_type,SQLSRV_PARAM_IN)
+     array($Seq_num,SQLSRV_PARAM_IN),
+		 array($selected_type,SQLSRV_PARAM_IN)
+
 
  		);
 
@@ -141,7 +152,7 @@ if(isset($_POST['updateType'])) {
       <strong>Type ID:</strong> <input type="number" name="id_q2edit"value="<?php echo $ID;?>"required><br>
    	  <strong>Title:</strong> <input type="text" name="title_q2edit" maxlength="20" value="<?php echo $title;?>" required><br>
    		 <strong>Model of Origin:</strong> <input type="text" name="model_q2edit" maxlength="30" value= "<?php echo $model;?>" required><br>
-   		  <strong>User entry</strong>: <input type="number" name="user_id_q2edit" value="<?php echo $UID;?>" required> <br>
+   		  <!-- <strong>User entry</strong>: <input type="number" name="user_id_q2edit" value="<?php echo $UID;?>" required> <br> -->
    			 <br><input type="submit" name="updateType"/>
    		 </form>
 

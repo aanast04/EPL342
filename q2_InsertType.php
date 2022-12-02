@@ -49,12 +49,27 @@ if(isset($_POST['Query2_Insert_Type'])) {
  //Read Query
  $tsql = "{call Q2InsertType(?,?,?,?)}";
 
+
+$pass= $_SESSION["pas"];
+$params1 = array( $pass );
+$user_entry = sqlsrv_query($conn,"SELECT U.Seq_Num FROM [User] U WHERE U.Password=?;",$params1);
+
+while ($row1 = sqlsrv_fetch_array($user_entry, SQLSRV_FETCH_ASSOC)) {
+	$Seq_num = $row1['Seq_Num'];
+}
+
+
+
+
+
+
+
   // Getting parameter from the http call and setting it for the SQL call
 	 $params = array(
      array($_POST["title_q2insert"], SQLSRV_PARAM_IN),
 	   array($_POST["model_q2insert"], SQLSRV_PARAM_IN),
 		 array($_POST["id_q2insert"], SQLSRV_PARAM_IN),
-		 array($_POST["user_id_q2insert"], SQLSRV_PARAM_IN)
+		 array(	 $Seq_num, SQLSRV_PARAM_IN)
 
 		);
 
@@ -126,7 +141,7 @@ if(isset($_POST['Query2_Insert_Type'])) {
    <strong>Type ID:</strong> <input type="number" name="id_q2insert" required><br>
 	  <strong>Title:</strong> <input type="text" name="title_q2insert" maxlength="20" required><br>
 		 <strong>Model of Origin:</strong> <input type="text" name="model_q2insert" maxlength="30" required><br>
-		 <strong>User entry</strong>: <input type="number" name="user_id_q2insert" required> <br>
+		 <!-- <strong>User entry</strong>: <input type="number" name="user_id_q2insert" required> <br> -->
 			 <br><input type="submit" name="Query2_Insert_Type"/>
 		 </form>
 
