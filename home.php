@@ -1,6 +1,29 @@
 
 <?php
-	session_start();
+session_start();
+	if (isset($_POST['con'])) {
+		echo "<br/>Setting session variables!<br/>";
+		// collect value of input field
+		$name = $_POST['Username'];
+		$pas = $_POST['Password'];
+
+
+		if (empty($name)) echo "name is empty!<br/>";
+		if (empty($pas)) echo "password is empty!<br/>";
+
+		if (!(empty($name) || empty($pas))) {
+			// Set session variables
+			$_SESSION["name"] = $name;
+			$_SESSION["pas"] = $pas;
+		} else {
+			session_unset();
+			session_destroy();
+			echo "<br/>Cannot setup the session variables! Redirecting back in 5 seconds<br/>";
+			die('<meta http-equiv="refresh" content="5; url=index.php" />');
+		}
+	}
+	echo $_SESSION["name"];
+	echo $_SESSION["pas"] ;
 ?>
 
 <!DOCTYPE html>
@@ -18,9 +41,11 @@
   	</tr>
       </table>
   	<hr>
-  	
-	<a href="q1_InsertUser.php">Query 1 (Insert User)</a><br>
-	<a href="q1_ViewUser.php">Query 1 (View Users)</a><br>
+
+	  <a href="q1_InsertUser.php">Query 1 (Insert User)</a><br>
+  	<a href="q1_ViewUsers.php">Query 1 (View Users)</a><br>
+		<a href="q2_InsertType.php">Query 2 (Insert Type)</a><br>
+		<a href="q2_ViewTypes.php">Query 2 (View Types)</a><br>
   	<a href="q4.php">Query 4 </a><br>
   	<a href="q5.php">Query 5 </a><br>
   	<a href="q6.php">Query 6 </a><br>

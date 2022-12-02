@@ -39,7 +39,7 @@
 	<hr>
 
 <?php
-if(isset($_POST['Query1_Insert_User'])) {
+if(isset($_POST['Query2_Insert_Fingerprint'])) {
 	echo "Connecting to SQL server (" . $serverName . ")<br/>";
 	echo "Database: " . $connectionOptions[Database] . ", SQL User: " . $connectionOptions[Uid] . "<br/>";
 	//echo "Pass: " . $connectionOptions[PWD] . "<br/>";
@@ -48,14 +48,14 @@ if(isset($_POST['Query1_Insert_User'])) {
 	$conn = sqlsrv_connect($serverName, $connectionOptions);
 
  //Read Query
- $tsql = "{call Q1Insert(?,?,?,?,?,?,?,?)}";
+ $tsql = "{call Query2InsertFingerprint(?,?,?,?,?,?)}";
 
   // Getting parameter from the http call and setting it for the SQL call
 	 $params = array( array($_POST["password_Insertq1"], SQLSRV_PARAM_IN),
 	  array($_POST["username_Insertq1"], SQLSRV_PARAM_IN),
 		 array($_POST["id_Insertq1"], SQLSRV_PARAM_IN),
 		 array($_POST["sex_Insertq1"], SQLSRV_PARAM_IN),
-		 array(date('Y-m-d h:m:s',strtotime( $_POST["date_of_birth_Insertq1"])), SQLSRV_PARAM_IN),
+		 array(date('Y-m-d',strtotime( $_POST["date_of_birth_Insertq1"])), SQLSRV_PARAM_IN),
 		  array($_POST["LName_Insertq1"], SQLSRV_PARAM_IN),
 			 array($_POST["FName_Insertq1"], SQLSRV_PARAM_IN),
 		  array($_POST["type_Insertq1"], SQLSRV_PARAM_IN)
@@ -123,24 +123,16 @@ if(isset($_POST['Query1_Insert_User'])) {
 		}
 	?>
 
- <h2><b>Insert User</b></h2>
+ <h2><b>Insert Fingerprint</b></h2><br>
  <form method="post" >
-	  Password: <input type="text" name="password_Insertq1" maxlength="35" required>&nbsp
-		UserName: <input type="text" name="username_Insertq1" maxlength="20" required>&nbsp
-		 ID: <input type="number" name="id_Insertq1" required>&nbsp <br>
-		 Sex: <br>
-		 <input type="radio" name="sex_Insertq1" value='M' required/>Male<br />
-		 <input type="radio" name="sex_Insertq1" value='F' required/>Female<br />
-		 Date_Of_Birth: <input type="date" name="date_of_birth_Insertq1" required>&nbsp
-		 Last Name: <input type="text" name="LName_Insertq1"  maxlength="40" required> &nbsp
-		 First Name: <input type="text" name="FName_Insertq1" maxlength="40" required> &nbsp
-			Type: <select name="type_Insertq1" >
-				<option value='3' selected="selected">User</option>
-				 <option value='2'>LocationMap </option>
-				 <option value='1' >Admin</option>
-			 </select>
+	<strong>  Date Of Register:</strong> <input type="datetime-local" name="date_InsertF"  required>&nbsp
+    <strong>Position:</strong><br>
+		X: <input type="text" name="x_InsertF"  required>&nbsp
+		 Y: <input type="number" name="y_InsertF" required>&nbsp
+		 Floor number:</strong> <input type="number" name="floor_InsertF" required>&nbsp <br>
+     <strong>User entry:</strong>  <input type="number" name="user_InsertF" required>&nbsp
 
-			 <br> <br><input type="submit" name="Query1_Insert_User"/>
+			 <br> <br><input type="submit" name="Query2_Insert_Fingerprint"/>
 
 		 </form>
 

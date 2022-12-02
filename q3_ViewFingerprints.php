@@ -37,9 +37,9 @@
 	</tr>
     </table>
 	<hr>
+  <h2>View Users</h2>
 
-<?php
-if(isset($_POST['Query1_Insert_User'])) {
+	<?php
 	echo "Connecting to SQL server (" . $serverName . ")<br/>";
 	echo "Database: " . $connectionOptions[Database] . ", SQL User: " . $connectionOptions[Uid] . "<br/>";
 	//echo "Pass: " . $connectionOptions[PWD] . "<br/>";
@@ -47,27 +47,15 @@ if(isset($_POST['Query1_Insert_User'])) {
 	//Establishes the connection
 	$conn = sqlsrv_connect($serverName, $connectionOptions);
 
- //Read Query
- $tsql = "{call Q1Insert(?,?,?,?,?,?,?,?)}";
+	//Read Query
 
-  // Getting parameter from the http call and setting it for the SQL call
-	 $params = array( array($_POST["password_Insertq1"], SQLSRV_PARAM_IN),
-	  array($_POST["username_Insertq1"], SQLSRV_PARAM_IN),
-		 array($_POST["id_Insertq1"], SQLSRV_PARAM_IN),
-		 array($_POST["sex_Insertq1"], SQLSRV_PARAM_IN),
-		 array(date('Y-m-d h:m:s',strtotime( $_POST["date_of_birth_Insertq1"])), SQLSRV_PARAM_IN),
-		  array($_POST["LName_Insertq1"], SQLSRV_PARAM_IN),
-			 array($_POST["FName_Insertq1"], SQLSRV_PARAM_IN),
-		  array($_POST["type_Insertq1"], SQLSRV_PARAM_IN)
+	$tsql=   "SELECT * FROM Fingerprint";
 
-		);
-
-	echo "Executing query: " . $tsql . ")<br/>";
-	 $getResults= sqlsrv_query($conn, $tsql, $params);
-
+	echo "Executing query: " . $tsql . ") without any parameter<br/>";
+	$getResults= sqlsrv_query($conn, $tsql);
+	echo "Results:<br/>";
 	if ($getResults == FALSE)
 		die(FormatErrors(sqlsrv_errors()));
-
 
 	PrintResultSet($getResults);
 
@@ -77,6 +65,23 @@ if(isset($_POST['Query1_Insert_User'])) {
 	/* Free connection resources. */
 	sqlsrv_close( $conn);
 
+	/*
+	function PrintResultSet ($resultSet) {
+		while ($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)) {
+			$newRow = true;
+			foreach($row as $col){
+				if ($newRow) {
+					$newRow = false;
+					echo (is_null($col) ? "Null" : $col);
+				} else {
+					echo (", ".(is_null($col) ? "Null" : $col));
+				}
+			}
+			echo("<br/>");
+		}
+		echo ("<table><tr><td>---</td></tr></table>");
+	}
+	*/
 
 	function PrintResultSet ($resultSet) {
 		echo ("<table><tr >");
@@ -86,16 +91,34 @@ if(isset($_POST['Query1_Insert_User'])) {
 			echo $fieldMetadata["Name"];
 			echo ("</th>");
 		}
+
+		echo("<th>Edit</th>");
+    echo("<th>Delete</th>");
 		echo ("</tr>");
+
 
 		while ($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)) {
 			echo ("<tr>");
+
 			foreach($row as $col){
+
 				echo ("<td>");
 				echo (is_null($col) ? "Null" : $col);
 				echo ("</td>");
 			}
-			echo ("</tr>");
+			//esu ta evales
+   	$Date_Of_Register = $row['Date_Of_Register'];
+		$X = $row['X'];
+		$Y= $row['Y'];
+		$Floor= $row['Floor'];
+		$FID= $row['FingerprintID'];
+    $User_entry = $row['User entry'];
+
+
+           	echo("<td><a href='q1_EditFingerprint.php?GetU=$UserName_edit&GetP=$Password&GetID=$ID&GetS=$Sex&GetD=$Date&GetL=$Last_Name&GetF=$First_Name&GetR=$Role' >Edit</a></td>");//esu to evales
+            echo("<td><a href='q1_DeleteFingerprint.php'>Edit</a></td>");//esu to evales
+
+
 		}
 		echo ("</table>");
 	}
@@ -111,9 +134,9 @@ if(isset($_POST['Query1_Insert_User'])) {
 			echo "Message: ".$error['message']."";
 		}
 	}
-}//to if p evales
-	?>
 
+	?>
+	<hr>
 	<?php
 		if(isset($_POST['disconnect'])) {
 			echo "Clossing session and redirecting to start page";
@@ -123,34 +146,10 @@ if(isset($_POST['Query1_Insert_User'])) {
 		}
 	?>
 
- <h2><b>Insert User</b></h2>
- <form method="post" >
-	  Password: <input type="text" name="password_Insertq1" maxlength="35" required>&nbsp
-		UserName: <input type="text" name="username_Insertq1" maxlength="20" required>&nbsp
-		 ID: <input type="number" name="id_Insertq1" required>&nbsp <br>
-		 Sex: <br>
-		 <input type="radio" name="sex_Insertq1" value='M' required/>Male<br />
-		 <input type="radio" name="sex_Insertq1" value='F' required/>Female<br />
-		 Date_Of_Birth: <input type="date" name="date_of_birth_Insertq1" required>&nbsp
-		 Last Name: <input type="text" name="LName_Insertq1"  maxlength="40" required> &nbsp
-		 First Name: <input type="text" name="FName_Insertq1" maxlength="40" required> &nbsp
-			Type: <select name="type_Insertq1" >
-				<option value='3' selected="selected">User</option>
-				 <option value='2'>LocationMap </option>
-				 <option value='1' >Admin</option>
-			 </select>
+	<form method="post">
+		<input type="submit" name="disconnect" value="Disconnect"/>
+		<input type="submit" value="Menu" formaction="connect.php">
+	</form>
 
-			 <br> <br><input type="submit" name="Query1_Insert_User"/>
-
-		 </form>
-
-
-
- <hr>
-	 	<form method="post">
-	 		<input type="submit" name="disconnect" value="Disconnect"/>
-	 		<input type="submit" value="Menu" formaction="connect.php">
-	 	</form>
-
-	 </body>
-	 </html>
+</body>
+</html>

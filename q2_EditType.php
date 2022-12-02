@@ -13,9 +13,18 @@
 		//header('Location: index.php');
 		//die();
 	}
+
+
+	$title = $_GET['GetT'];
+	$model = $_GET['GetM'];
+  $UID=$_GET['GetU'];
+	$ID = $_GET['GetID'];
+  $selected_type =$title;
+
+
+
+
 ?>
-
-
 <html>
 <head>
 	<style>
@@ -38,8 +47,9 @@
     </table>
 	<hr>
 
+
 <?php
-if(isset($_POST['Query1_Insert_User'])) {
+if(isset($_POST['updateType'])) {
 	echo "Connecting to SQL server (" . $serverName . ")<br/>";
 	echo "Database: " . $connectionOptions[Database] . ", SQL User: " . $connectionOptions[Uid] . "<br/>";
 	//echo "Pass: " . $connectionOptions[PWD] . "<br/>";
@@ -47,27 +57,24 @@ if(isset($_POST['Query1_Insert_User'])) {
 	//Establishes the connection
 	$conn = sqlsrv_connect($serverName, $connectionOptions);
 
- //Read Query
- $tsql = "{call Q1Insert(?,?,?,?,?,?,?,?)}";
 
-  // Getting parameter from the http call and setting it for the SQL call
-	 $params = array( array($_POST["password_Insertq1"], SQLSRV_PARAM_IN),
-	  array($_POST["username_Insertq1"], SQLSRV_PARAM_IN),
-		 array($_POST["id_Insertq1"], SQLSRV_PARAM_IN),
-		 array($_POST["sex_Insertq1"], SQLSRV_PARAM_IN),
-		 array(date('Y-m-d h:m:s',strtotime( $_POST["date_of_birth_Insertq1"])), SQLSRV_PARAM_IN),
-		  array($_POST["LName_Insertq1"], SQLSRV_PARAM_IN),
-			 array($_POST["FName_Insertq1"], SQLSRV_PARAM_IN),
-		  array($_POST["type_Insertq1"], SQLSRV_PARAM_IN)
+  $tsql = "{call Q2EditType(?,?,?,?,?)}";
 
-		);
+   // Getting parameter from the http call and setting it for the SQL call
+ 	 $params = array(
+      array($_POST["title_q2edit"], SQLSRV_PARAM_IN),
+ 	   array($_POST["model_q2edit"], SQLSRV_PARAM_IN),
+ 		 array($_POST["id_q2edit"], SQLSRV_PARAM_IN),
+ 		 array($UID, SQLSRV_PARAM_IN),
+     array($selected_type,SQLSRV_PARAM_IN)
+
+ 		);
+
 
 	echo "Executing query: " . $tsql . ")<br/>";
 	 $getResults= sqlsrv_query($conn, $tsql, $params);
-
 	if ($getResults == FALSE)
 		die(FormatErrors(sqlsrv_errors()));
-
 
 	PrintResultSet($getResults);
 
@@ -111,6 +118,7 @@ if(isset($_POST['Query1_Insert_User'])) {
 			echo "Message: ".$error['message']."";
 		}
 	}
+
 }//to if p evales
 	?>
 
@@ -121,36 +129,31 @@ if(isset($_POST['Query1_Insert_User'])) {
 			session_destroy();
 			die('<meta http-equiv="refresh" content="1; url=index.php" />');
 		}
+
 	?>
+<body>
 
- <h2><b>Insert User</b></h2>
- <form method="post" >
-	  Password: <input type="text" name="password_Insertq1" maxlength="35" required>&nbsp
-		UserName: <input type="text" name="username_Insertq1" maxlength="20" required>&nbsp
-		 ID: <input type="number" name="id_Insertq1" required>&nbsp <br>
-		 Sex: <br>
-		 <input type="radio" name="sex_Insertq1" value='M' required/>Male<br />
-		 <input type="radio" name="sex_Insertq1" value='F' required/>Female<br />
-		 Date_Of_Birth: <input type="date" name="date_of_birth_Insertq1" required>&nbsp
-		 Last Name: <input type="text" name="LName_Insertq1"  maxlength="40" required> &nbsp
-		 First Name: <input type="text" name="FName_Insertq1" maxlength="40" required> &nbsp
-			Type: <select name="type_Insertq1" >
-				<option value='3' selected="selected">User</option>
-				 <option value='2'>LocationMap </option>
-				 <option value='1' >Admin</option>
-			 </select>
+  <div class="Edit">
 
-			 <br> <br><input type="submit" name="Query1_Insert_User"/>
+
+    <h2><b>Edit Type</b></h2>
+    <form method="post" >
+      <strong>Type ID:</strong> <input type="number" name="id_q2edit"value="<?php echo $ID;?>"required><br>
+   	  <strong>Title:</strong> <input type="text" name="title_q2edit" maxlength="20" value="<?php echo $title;?>" required><br>
+   		 <strong>Model of Origin:</strong> <input type="text" name="model_q2edit" maxlength="30" value= "<?php echo $model;?>" required><br>
+   		  <strong>User entry</strong>: <input type="number" name="user_id_q2edit" value="<?php echo $UID;?>" required> <br>
+   			 <br><input type="submit" name="updateType"/>
+   		 </form>
+
 
 		 </form>
 
+	<hr>
 
+<form method="post">
+		<input type="submit" name="disconnect" value="Disconnect"/>
+		<input type="submit" value="Menu" formaction="connect.php">
+	</form>
 
- <hr>
-	 	<form method="post">
-	 		<input type="submit" name="disconnect" value="Disconnect"/>
-	 		<input type="submit" value="Menu" formaction="connect.php">
-	 	</form>
-
-	 </body>
-	 </html>
+</body>
+</html>

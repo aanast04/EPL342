@@ -13,9 +13,16 @@
 		//header('Location: index.php');
 		//die();
 	}
+
+
+
+	$ID = $_GET['GetID'];
+
+
+
+
+
 ?>
-
-
 <html>
 <head>
 	<style>
@@ -38,8 +45,9 @@
     </table>
 	<hr>
 
+
 <?php
-if(isset($_POST['Query1_Insert_User'])) {
+
 	echo "Connecting to SQL server (" . $serverName . ")<br/>";
 	echo "Database: " . $connectionOptions[Database] . ", SQL User: " . $connectionOptions[Uid] . "<br/>";
 	//echo "Pass: " . $connectionOptions[PWD] . "<br/>";
@@ -47,27 +55,21 @@ if(isset($_POST['Query1_Insert_User'])) {
 	//Establishes the connection
 	$conn = sqlsrv_connect($serverName, $connectionOptions);
 
- //Read Query
- $tsql = "{call Q1Insert(?,?,?,?,?,?,?,?)}";
 
-  // Getting parameter from the http call and setting it for the SQL call
-	 $params = array( array($_POST["password_Insertq1"], SQLSRV_PARAM_IN),
-	  array($_POST["username_Insertq1"], SQLSRV_PARAM_IN),
-		 array($_POST["id_Insertq1"], SQLSRV_PARAM_IN),
-		 array($_POST["sex_Insertq1"], SQLSRV_PARAM_IN),
-		 array(date('Y-m-d h:m:s',strtotime( $_POST["date_of_birth_Insertq1"])), SQLSRV_PARAM_IN),
-		  array($_POST["LName_Insertq1"], SQLSRV_PARAM_IN),
-			 array($_POST["FName_Insertq1"], SQLSRV_PARAM_IN),
-		  array($_POST["type_Insertq1"], SQLSRV_PARAM_IN)
+  $tsql = "{call Q2DeleteType(?)}";
 
-		);
+   // Getting parameter from the http call and setting it for the SQL call
+ 	 $params = array(
+
+     array($ID,SQLSRV_PARAM_IN)
+
+ 		);
+
 
 	echo "Executing query: " . $tsql . ")<br/>";
 	 $getResults= sqlsrv_query($conn, $tsql, $params);
-
 	if ($getResults == FALSE)
 		die(FormatErrors(sqlsrv_errors()));
-
 
 	PrintResultSet($getResults);
 
@@ -111,7 +113,8 @@ if(isset($_POST['Query1_Insert_User'])) {
 			echo "Message: ".$error['message']."";
 		}
 	}
-}//to if p evales
+
+
 	?>
 
 	<?php
@@ -121,36 +124,16 @@ if(isset($_POST['Query1_Insert_User'])) {
 			session_destroy();
 			die('<meta http-equiv="refresh" content="1; url=index.php" />');
 		}
+
 	?>
+<body>
 
- <h2><b>Insert User</b></h2>
- <form method="post" >
-	  Password: <input type="text" name="password_Insertq1" maxlength="35" required>&nbsp
-		UserName: <input type="text" name="username_Insertq1" maxlength="20" required>&nbsp
-		 ID: <input type="number" name="id_Insertq1" required>&nbsp <br>
-		 Sex: <br>
-		 <input type="radio" name="sex_Insertq1" value='M' required/>Male<br />
-		 <input type="radio" name="sex_Insertq1" value='F' required/>Female<br />
-		 Date_Of_Birth: <input type="date" name="date_of_birth_Insertq1" required>&nbsp
-		 Last Name: <input type="text" name="LName_Insertq1"  maxlength="40" required> &nbsp
-		 First Name: <input type="text" name="FName_Insertq1" maxlength="40" required> &nbsp
-			Type: <select name="type_Insertq1" >
-				<option value='3' selected="selected">User</option>
-				 <option value='2'>LocationMap </option>
-				 <option value='1' >Admin</option>
-			 </select>
+	<hr>
 
-			 <br> <br><input type="submit" name="Query1_Insert_User"/>
+<form method="post">
+		<input type="submit" name="disconnect" value="Disconnect"/>
+		<input type="submit" value="Menu" formaction="connect.php">
+	</form>
 
-		 </form>
-
-
-
- <hr>
-	 	<form method="post">
-	 		<input type="submit" name="disconnect" value="Disconnect"/>
-	 		<input type="submit" value="Menu" formaction="connect.php">
-	 	</form>
-
-	 </body>
-	 </html>
+</body>
+</html>

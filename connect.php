@@ -48,12 +48,12 @@
 <div class="bg">
 	<form action="home.php" method="post">
 		<div class="form-field">
-			<input type="text" placeholder=" Username" required />
+			<input type="text" name="Username" placeholder=" Username" required />
 		</div>
 		<div class="form-field">
-			<input type="password" placeholder="Password" required /> </div>
+			<input type="password" name="Password"placeholder="Password" required /> </div>
 			<div class="form-field">
-				<button class="btn" type="submit">Log in</button>
+				<button class="btn" name="con" type="submit">Log in</button>
 			</div>
 		</form>
 		</div>
