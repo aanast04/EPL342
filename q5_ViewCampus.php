@@ -40,7 +40,7 @@
 	</tr>
     </table>
 	<hr>
-  <h2>View Fingerprints</h2>
+  <h2>View Campuses</h2>
 
 	<?php
 	echo "Connecting to SQL server (" . $serverName . ")<br/>";

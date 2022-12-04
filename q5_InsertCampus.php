@@ -13,7 +13,7 @@
 		//header('Location: index.php');
 		//die();
 	}
-	
+
 ?>
 
 
@@ -54,18 +54,13 @@ if(isset($_POST['Query5_Insert_Campus'])) {
  //Read Query
  $tsql = "{call Q5InsertCampus(?,?,?,?,?)}";
 
-   echo $_POST["c1"] ;echo("<br>");
- echo $_POST["c2"] ;echo("<br>");
- echo $_POST["c3"] ;echo("<br>");
- echo $_POST["c4"] ;echo("<br>");
- echo $_POST["c5"] ;echo("<br>");
 
 
 
 
   // Getting parameter from the http call and setting it for the SQL call
-	 $params = array( 
-	 
+	 $params = array(
+
 		 array($_POST["c1"], SQLSRV_PARAM_IN),
   		array($_POST["c2"], SQLSRV_PARAM_IN),
 		array($_POST["c3"], SQLSRV_PARAM_IN),

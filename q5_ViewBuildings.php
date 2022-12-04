@@ -104,6 +104,7 @@ ORDER BY B.BuildID,B.BCode,B.[Small_Description]" ;
 
 		echo("<th>Delete</th>");
 
+
 		echo ("</tr>");
 
 
@@ -129,9 +130,9 @@ ORDER BY B.BuildID,B.BCode,B.[Small_Description]" ;
 		echo ("</table>");
       echo("<br>");
 
- 
+
   	  $C_ID = $_GET['GetID'];
-      echo("<a href='q5_InsertBuilding.php?GetID=$CID'>Insert new Object</a>");//esu to evales
+      echo("<a href='q5_InsertBuilding.php?GetID=$C_ID'>Insert new Building</a>");//esu to evales
 	}
 
 	function FormatErrors( $errors ){
