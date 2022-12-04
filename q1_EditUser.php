@@ -13,7 +13,7 @@
 		//header('Location: index.php');
 		//die();
 	}
-	
+
 
 	$UserName = $_GET['GetU'];
 	$Password = $_GET['GetP'];
@@ -25,7 +25,7 @@
 	$Role = $_GET['GetR'];
 
 
-	
+
 
 ?>
 <html>

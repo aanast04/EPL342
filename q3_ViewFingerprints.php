@@ -13,6 +13,9 @@
 		//header('Location: index.php');
 		//die();
 	}
+
+//	$FID= $_GET['GetID'];
+
 ?>
 
 
@@ -49,7 +52,7 @@
 
 	//Read Query
 
-	$tsql=   "EXEC Q3ViewFingerpint";
+	$tsql=   "{Call Q3ViewFingerpint()}";
 
 	//echo "Executing query: " . $tsql . ") without any parameter<br/>";
 	$getResults= sqlsrv_query($conn, $tsql);
@@ -109,7 +112,7 @@
 
 		$FID= $row['FingerprintID'];
 
-           	echo("<td><a href='q1_ViewObjects.php?GetID=$FID' >Find Objects</a></td>");//esu to evales
+           	echo("<td><a href='q3_ViewObjects.php?GetID=$FID'>See Objects</a></td>");//esu to evales
 
 		}
 		echo ("</table>");

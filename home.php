@@ -1,6 +1,21 @@
 
 <?php
 session_start();
+
+if(isset($_SESSION["serverName"]) && isset($_SESSION["connectionOptions"])) {
+	$serverName = $_SESSION["serverName"];
+	$connectionOptions = $_SESSION["connectionOptions"];
+} else {
+	// Session is not correctly set! Redirecting to start page
+	session_unset();
+	session_destroy();
+	echo "Session is not correctly set! Clossing session and redirecting to start page in 3 seconds<br/>";
+	die('<meta http-equiv="refresh" content="3; url=index.php" />');
+	//header('Location: index.php');
+	//die();
+}
+	$conn = sqlsrv_connect($serverName, $connectionOptions);
+
 	if (isset($_POST['con'])) {
 		echo "<br/>Setting session variables!<br/>";
 		// collect value of input field
@@ -13,17 +28,67 @@ session_start();
 
 		if (!(empty($name) || empty($pas))) {
 			// Set session variables
+
 			$_SESSION["name"] = $name;
 			$_SESSION["pas"] = $pas;
+
+			// $Username = $_SESSION["name"];
+			// $Password = $_SESSION["pas"];
+			$params1 = array( $Username );
+			$params2 = array($Username, $Password);
+
+			$login = FALSE;
+
+			$login_check = "SELECT Username, Password
+        FROM [User]
+        WHERE Username= '$name' AND Password='$pas'";
+					$stmt = sqlsrv_query( $conn, $login_check);
+					$row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+						if( $stmt === false ) {
+     			die( print_r( sqlsrv_errors(), true));
+						}
+
+						if(!$row){
+							echo"<h1>The user does not exist</h1>";
+								die('<meta http-equiv="refresh" content="5; url=connect.php" />');
+						}
+
+							// Make the first (and in this case, only) row of the result set available for reading.
+							if( sqlsrv_fetch( $stmt ) === false) {
+     					die( print_r( sqlsrv_errors(), true));
+								}
+
+// Get the row fields. Field indices start at 0 and must be retrieved in order.
+// Retrieving row fields by name is not supported by sqlsrv_get_field.
+					$name = sqlsrv_get_field( $stmt, 0);
+					echo "$name: ";
+
+
+
+
+			$Username = $_SESSION["name"];
+			$params1 = array( $Username );
+			$type = sqlsrv_query($conn,"SELECT U.Type FROM [User] U WHERE U.Username=?;",$params1);
+
+			while ($row1 = sqlsrv_fetch_array($type, SQLSRV_FETCH_ASSOC)) {
+				$type = $row1['Type'];
+				}
+
+					$_SESSION["Type"] = $type;
+
+
 		} else {
 			session_unset();
 			session_destroy();
 			echo "<br/>Cannot setup the session variables! Redirecting back in 5 seconds<br/>";
-			die('<meta http-equiv="refresh" content="5; url=index.php" />');
+			die('<meta http-equiv="refresh" content="2; url=index.php" />');
 		}
 	}
-	echo $_SESSION["name"];
-	echo $_SESSION["pas"] ;
+
+
+	//echo $_SESSION["name"];
+	//echo $_SESSION["pas"] ;
+	//echo $_SESSION["Type"];
 ?>
 
 <!DOCTYPE html>
@@ -42,13 +107,24 @@ session_start();
       </table>
   	<hr>
 
-	  <a href="q1_InsertUser.php">Query 1 (Insert User)</a><br>
-  	<a href="q1_ViewUsers.php">Query 1 (View Users)</a><br>
-		<a href="q2_InsertType.php">Query 2 (Insert Type)</a><br>
-		<a href="q2_ViewTypes.php">Query 2 (View Types)</a><br>
-		<a href="q3_ViewFingerprints.php">Query 3 (View Fingerprints)</a><br>
-  	<a href="q4.php">Query 4 </a><br>
-  	<a href="q5.php">Query 5 </a><br>
+	<?php
+	if ( $type == 1 ){
+	 echo("<a href='q1_InsertUser.php'>Query 1 (Insert User)</a><br>");
+  	echo("<a href='q1_ViewUsers.php'>Query 1 (View Users)</a><br>");
+	}
+	?>
+	<?php
+		if ( $type == 2 || $type == 1){
+		echo("<a href='q2_InsertType.php'>Query 2 (Insert Type)</a><br>");
+		echo("<a href='q2_ViewTypes.php'>Query 2 (View Types)</a><br>");
+		echo("<a href='q3_InsertFingerprint.php'>Query 3 (Insert Fingerprint)</a><br>");
+	echo("<a href='q3_ViewFingerprints.php'>Query 3 (View Fingerprints)</a><br>");
+  	echo("<a href='q4.php'>Query 4 </a><br>");
+  	echo("<a href='q5_ViewCampus.php'>Query 5 (View Campuses) </a><br>");
+	echo("<a href='q5_InsertCampus.php'>Query 5 (Insert Campus) </a><br>");
+	}
+	?>
+
   	<a href="q6.php">Query 6 (List of fingerprints)</a><br>
   	<a href="q7.php">Query 7 (Find most popular item types)</a><br>
   	<a href="q8.php">Query 8 (Number of types of POIs per floor)</a><br>
@@ -109,7 +185,13 @@ session_start();
 		Parameter: <input type="number" name="floor_number_q20" placeholder = "Floor Number">
   		<input type="submit" name="Query 20">
 		  </form><br>
-  	<a href="q21.php">Query 21 (Total number of fingerprint route objects)</a><br>
+  	<a>Query 21 </a><br>
+		<form action="q21.php" method="post">
+  		</a>(Total number of fingerprint route objects)<br>
+		Parameter: <input type="number" name="fid_q21" placeholder = "Fingerprint ID">
+		Parameter: <input type="number" name="x_q21" placeholder = "X">
+  		<input type="submit" name="Query 21">
+		  </form><br><br>
 
 
   	<hr>

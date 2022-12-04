@@ -13,8 +13,12 @@
 		//header('Location: index.php');
 		//die();
 	}
-?>
 
+
+
+	$BID = $_GET['GetID'];
+
+?>
 <html>
 <head>
 	<style>
@@ -36,8 +40,11 @@
 	</tr>
     </table>
 	<hr>
+Deleted!
 
-	<?php
+
+<?php
+
 	echo "Connecting to SQL server (" . $serverName . ")<br/>";
 	echo "Database: " . $connectionOptions[Database] . ", SQL User: " . $connectionOptions[Uid] . "<br/>";
 	//echo "Pass: " . $connectionOptions[PWD] . "<br/>";
@@ -45,27 +52,30 @@
 	//Establishes the connection
 	$conn = sqlsrv_connect($serverName, $connectionOptions);
 
-	//Read Stored proc with param
-	$tsql = "{call Q21(?,?)}";
-	//echo "Executing query: " . $tsql . ") with parameter " . $_POST["fingerprint_q13"] . "<br/>";
 
-	// Getting parameter from the http call and setting it for the SQL call
-	$params = array(
-			array($_POST["fid_q21"], SQLSRV_PARAM_IN),
-           array($_POST["x_q21"], SQLSRV_PARAM_IN)
-					);
+  $tsql = "{call Q5DeleteBuilding(?)}";
 
-	$getResults= sqlsrv_query($conn, $tsql, $params);
-	echo ("Results:<br/>");
+   // Getting parameter from the http call and setting it for the SQL call
+ 	 $params = array(
+
+     array($BID,SQLSRV_PARAM_IN)
+
+ 		);
+
+
+	echo "Executing query: " . $tsql . ")<br/>";
+	 $getResults= sqlsrv_query($conn, $tsql, $params);
 	if ($getResults == FALSE)
 		die(FormatErrors(sqlsrv_errors()));
 
 	PrintResultSet($getResults);
+
 	/* Free query  resources. */
 	sqlsrv_free_stmt($getResults);
 
 	/* Free connection resources. */
 	sqlsrv_close( $conn);
+
 
 	function PrintResultSet ($resultSet) {
 		echo ("<table><tr >");
@@ -101,9 +111,9 @@
 		}
 	}
 
+
 	?>
 
-	<hr>
 	<?php
 		if(isset($_POST['disconnect'])) {
 			echo "Clossing session and redirecting to start page";
@@ -111,11 +121,15 @@
 			session_destroy();
 			die('<meta http-equiv="refresh" content="1; url=index.php" />');
 		}
-	?>
 
-	<form method="post">
+	?>
+<body>
+
+	<hr>
+
+<form method="post">
 		<input type="submit" name="disconnect" value="Disconnect"/>
-		<input type="submit" value="Menu" formaction="home.php">
+		<input type="submit" value="Menu" formaction="connect.php">
 	</form>
 
 </body>

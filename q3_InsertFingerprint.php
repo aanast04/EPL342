@@ -13,6 +13,7 @@
 		//header('Location: index.php');
 		//die();
 	}
+	
 ?>
 
 
@@ -39,26 +40,40 @@
 	<hr>
 
 <?php
-if(isset($_POST['Query2_Insert_Fingerprint'])) {
+if(isset($_POST['Query3_Insert_Fingerprint'])) {
 	echo "Connecting to SQL server (" . $serverName . ")<br/>";
 	echo "Database: " . $connectionOptions[Database] . ", SQL User: " . $connectionOptions[Uid] . "<br/>";
 	//echo "Pass: " . $connectionOptions[PWD] . "<br/>";
 
 	//Establishes the connection
 	$conn = sqlsrv_connect($serverName, $connectionOptions);
+//find id of user that wants to insert the fingeprint
+$pass= $_SESSION["pas"];
+$params1 = array( $pass );
+$user_entry = sqlsrv_query($conn,"SELECT U.Seq_Num FROM [User] U WHERE U.Password=?;",$params1);
+
+while ($row1 = sqlsrv_fetch_array($user_entry, SQLSRV_FETCH_ASSOC)) {
+	$Seq_num = $row1['Seq_Num'];
+}
+
+
 
  //Read Query
- $tsql = "{call Query2InsertFingerprint(?,?,?,?,?,?)}";
+ $tsql = "{call Q3InsertFingerprint(?,?,?,?,?,?)}";
+
+
+$X=floatval($_POST["x_InsertF"]);
+$Y=floatval($_POST["y_InsertF"]);
+
 
   // Getting parameter from the http call and setting it for the SQL call
-	 $params = array( array($_POST["password_Insertq1"], SQLSRV_PARAM_IN),
-	  array($_POST["username_Insertq1"], SQLSRV_PARAM_IN),
-		 array($_POST["id_Insertq1"], SQLSRV_PARAM_IN),
-		 array($_POST["sex_Insertq1"], SQLSRV_PARAM_IN),
-		 array(date('Y-m-d',strtotime( $_POST["date_of_birth_Insertq1"])), SQLSRV_PARAM_IN),
-		  array($_POST["LName_Insertq1"], SQLSRV_PARAM_IN),
-			 array($_POST["FName_Insertq1"], SQLSRV_PARAM_IN),
-		  array($_POST["type_Insertq1"], SQLSRV_PARAM_IN)
+	 $params = array( array(date('Y-m-d h:m:s.n',strtotime( $_POST["date_InsertF"])), SQLSRV_PARAM_IN),
+	  array($X, SQLSRV_PARAM_IN),
+		 array($Y ,SQLSRV_PARAM_IN),
+		 array($_POST["floor_InsertF"], SQLSRV_PARAM_IN),
+  		array($_POST["id_InsertF"], SQLSRV_PARAM_IN),
+		array($Seq_num, SQLSRV_PARAM_IN)
+		  
 
 		);
 
@@ -76,6 +91,7 @@ if(isset($_POST['Query2_Insert_Fingerprint'])) {
 
 	/* Free connection resources. */
 	sqlsrv_close( $conn);
+
 
 
 	function PrintResultSet ($resultSet) {
@@ -126,13 +142,13 @@ if(isset($_POST['Query2_Insert_Fingerprint'])) {
  <h2><b>Insert Fingerprint</b></h2><br>
  <form method="post" >
 	<strong>  Date Of Register:</strong> <input type="datetime-local" name="date_InsertF"  required>&nbsp
-    <strong>Position:</strong><br>
+    <br><strong>Position:</strong><br>
 		X: <input type="text" name="x_InsertF"  required>&nbsp
-		 Y: <input type="number" name="y_InsertF" required>&nbsp
-		 Floor number:</strong> <input type="number" name="floor_InsertF" required>&nbsp <br>
-     <strong>User entry:</strong>  <input type="number" name="user_InsertF" required>&nbsp
+		 Y: <input type="text" name="y_InsertF" required>&nbsp
+		 Floor number: <input type="number" name="floor_InsertF" required> <br>
+		<strong>FingerprintID:</strong><input type="number" name="id_InsertF" required> <br>
 
-			 <br> <br><input type="submit" name="Query2_Insert_Fingerprint"/>
+			 <br> <br><input type="submit" name="Query3_Insert_Fingerprint"/>
 
 		 </form>
 

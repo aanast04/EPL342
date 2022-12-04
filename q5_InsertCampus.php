@@ -13,7 +13,9 @@
 		//header('Location: index.php');
 		//die();
 	}
+	
 ?>
+
 
 <html>
 <head>
@@ -37,35 +39,57 @@
     </table>
 	<hr>
 
-	<?php
+<?php
+if(isset($_POST['Query5_Insert_Campus'])) {
 	echo "Connecting to SQL server (" . $serverName . ")<br/>";
 	echo "Database: " . $connectionOptions[Database] . ", SQL User: " . $connectionOptions[Uid] . "<br/>";
 	//echo "Pass: " . $connectionOptions[PWD] . "<br/>";
 
 	//Establishes the connection
 	$conn = sqlsrv_connect($serverName, $connectionOptions);
+//find id of user that wants to insert the fingeprint
 
-	//Read Stored proc with param
-	$tsql = "{call Q21(?,?)}";
-	//echo "Executing query: " . $tsql . ") with parameter " . $_POST["fingerprint_q13"] . "<br/>";
 
-	// Getting parameter from the http call and setting it for the SQL call
-	$params = array(
-			array($_POST["fid_q21"], SQLSRV_PARAM_IN),
-           array($_POST["x_q21"], SQLSRV_PARAM_IN)
-					);
 
-	$getResults= sqlsrv_query($conn, $tsql, $params);
-	echo ("Results:<br/>");
+ //Read Query
+ $tsql = "{call Q5InsertCampus(?,?,?,?,?)}";
+
+   echo $_POST["c1"] ;echo("<br>");
+ echo $_POST["c2"] ;echo("<br>");
+ echo $_POST["c3"] ;echo("<br>");
+ echo $_POST["c4"] ;echo("<br>");
+ echo $_POST["c5"] ;echo("<br>");
+
+
+
+
+  // Getting parameter from the http call and setting it for the SQL call
+	 $params = array( 
+	 
+		 array($_POST["c1"], SQLSRV_PARAM_IN),
+  		array($_POST["c2"], SQLSRV_PARAM_IN),
+		array($_POST["c3"], SQLSRV_PARAM_IN),
+		array(date('Y-m-d',strtotime( $_POST["c4"])), SQLSRV_PARAM_IN),
+	 	array($_POST["c5"], SQLSRV_PARAM_IN)
+
+		);
+
+	echo "Executing query: " . $tsql . ")<br/>";
+	 $getResults= sqlsrv_query($conn, $tsql, $params);
+
 	if ($getResults == FALSE)
 		die(FormatErrors(sqlsrv_errors()));
 
+
 	PrintResultSet($getResults);
+
 	/* Free query  resources. */
 	sqlsrv_free_stmt($getResults);
 
 	/* Free connection resources. */
 	sqlsrv_close( $conn);
+
+
 
 	function PrintResultSet ($resultSet) {
 		echo ("<table><tr >");
@@ -100,10 +124,9 @@
 			echo "Message: ".$error['message']."";
 		}
 	}
-
+}//to if p evales
 	?>
 
-	<hr>
 	<?php
 		if(isset($_POST['disconnect'])) {
 			echo "Clossing session and redirecting to start page";
@@ -113,10 +136,25 @@
 		}
 	?>
 
-	<form method="post">
-		<input type="submit" name="disconnect" value="Disconnect"/>
-		<input type="submit" value="Menu" formaction="home.php">
-	</form>
+ <h2><b>Insert Campus</b></h2><br>
+ <form method="post" >
+	<strong> Campus Name:</strong> <input type="text" name="c1" maxlenght="70"   required><br>
+		<strong>Campus ID:</strong> <input type="number" name="c2"  required><br>
+		<strong> Description :</strong> <input type="text" name="c3" maxlength= "150" required><br>
+		<strong> Date of Registration:</strong> <input type="date" name="c4" required> <br>
+		<strong>URL:</strong><input type="text" name="c5" maxlenght="120" required> <br>
 
-</body>
-</html>
+			 <br> <br><input type="submit" name="Query5_Insert_Campus"/>
+
+		 </form>
+
+
+
+ <hr>
+	 	<form method="post">
+	 		<input type="submit" name="disconnect" value="Disconnect"/>
+	 		<input type="submit" value="Menu" formaction="connect.php">
+	 	</form>
+
+	 </body>
+	 </html>

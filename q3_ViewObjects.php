@@ -13,7 +13,9 @@
 		//header('Location: index.php');
 		//die();
 	}
-  $FID = $_GET['GetID'];
+  $F_ID = $_GET['GetID'];
+
+
 ?>
 
 
@@ -38,7 +40,90 @@
 	</tr>
     </table>
 	<hr>
-  <h2>View Fingerprints</h2>
+  <h2>View Objects in FingerprintID = <?php echo $F_ID?></h2>
+
+<?php
+
+// if(isset($_POST['search_object']){
+// $conn = sqlsrv_connect($serverName, $connectionOptions);
+// 	$Object_ID = $_POST['oid'];
+// $tsq2=   "SELECT O.Height,O.Width,O.ObjectID,O.FingerprintID,O.TypeID,O.Small_Description as [Description] , o.User_entry as [User Entry] FROM [Object] O INNER JOIN [FINGERPRINT] F ON O.FingerprintID=F.FingerprintID  WHERE $F_ID = F.FingerprintID AND $Object_ID=O.ObjectID ORDER BY O.ObjectID,O.TypeID" ;
+//
+//
+// //echo "Executing query: " . $tsql . ") without any parameter<br/>";
+// $getResults= sqlsrv_query($conn, $tsq2);
+// echo "Results:<br/>";
+// if ($getResults == FALSE)
+// 	die(FormatErrors(sqlsrv_errors()));
+//
+// PrintResultSet($getResults);
+//
+// /* Free query  resources. */
+// sqlsrv_free_stmt($getResults);
+//
+// /* Free connection resources. */
+// sqlsrv_close( $conn);
+//
+// function PrintResultSet ($resultSet) {
+// 	echo ("<table><tr >");
+//
+// 	foreach( sqlsrv_field_metadata($resultSet) as $fieldMetadata ) {
+// 		echo ("<th>");
+// 		echo $fieldMetadata["Name"];
+// 		echo ("</th>");
+// 	}
+//
+// 	echo("<th>View Objects</th>");
+//
+// 	echo ("</tr>");
+//
+//
+// 	while ($row1 = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)) {
+// 		echo ("<tr>");
+//
+// 		foreach($row1 as $col){
+//
+// 			echo ("<td>");
+// 			echo (is_null($col) ? "Null" : $col);
+// 			echo ("</td>");
+// 		}
+// 		//esu ta evales
+//
+// 	$OID2= $row1['ObjectID'];
+//
+// 					echo("<td><a href='q3_DeleteObject.php?GetID=$OID2' >Delete</a></td>");//esu to evales
+//
+//
+// 	}
+//
+//
+// 	echo ("</table>");
+// 		echo("<br>");
+//
+// 	 $FID = $_GET['GetID'];
+// 		echo("<a href='q3_InsertObject.php?GetFID=$FID&GetOID=$OID'>Insert new Object</a>");//esu to evales
+// }
+//
+// function FormatErrors( $errors ){
+// 	/* Display errors. */
+// 	echo "Error information: ";
+//
+// 	foreach ( $errors as $error )
+// 	{
+// 		echo "SQLSTATE: ".$error['SQLSTATE']."";
+// 		echo "Code: ".$error['code']."";
+// 		echo "Message: ".$error['message']."";
+// 	}
+// }
+// }//IF
+
+///////////////////////////////////////////////////////////////
+?>
+
+<form method="post">
+<input type="number" placeholder="Search by Object Id"  name="oid">
+<input type="submit"   name="search_object" value="Search"/>
+</form>
 
 	<?php
 	echo "Connecting to SQL server (" . $serverName . ")<br/>";
@@ -50,7 +135,7 @@
 
 	//Read Query
 
-	$tsql=   "SELECT * FROM [Object] O INNER JOIN [FINGERPRINT] F ON O.FingerprintID=F.FingerprintID  WHERE $FID = F.FingerprintID";
+	$tsql=   "SELECT O.Height,O.Width,O.ObjectID,O.FingerprintID,O.TypeID,O.Small_Description as [Description] , o.User_entry as [User Entry] FROM [Object] O INNER JOIN [FINGERPRINT] F ON O.FingerprintID=F.FingerprintID  WHERE $F_ID = F.FingerprintID   ORDER BY O.ObjectID,O.TypeID" ;
 
 
 	//echo "Executing query: " . $tsql . ") without any parameter<br/>";
@@ -94,7 +179,8 @@
 			echo ("</th>");
 		}
 
-		echo("<th>View Objects</th>");
+		echo("<th>Delete</th>");
+
 		echo ("</tr>");
 
 
@@ -111,11 +197,17 @@
 
 		$OID= $row['ObjectID'];
 
-           	echo("<td><a href='q1_DeleteObject.php?GetID=$OID' >Delete Objects</a></td>");//esu to evales
-            echo("<td><a href='q1_InsertObject.php?GetID= $FID ' >Insert Objects</a></td>");//esu to evales
+           	echo("<td><a href='q3_DeleteObject.php?GetID=$OID' >Delete</a></td>");//esu to evales
+
 
 		}
+
+
 		echo ("</table>");
+      echo("<br>");
+
+  	 $FID = $_GET['GetID'];
+      echo("<a href='q3_InsertObject.php?GetFID=$FID&GetOID=$OID'>Insert new Object</a>");//esu to evales
 	}
 
 	function FormatErrors( $errors ){
@@ -130,8 +222,14 @@
 		}
 	}
 
+
+
+
 	?>
+
+
 	<hr>
+
 	<?php
 		if(isset($_POST['disconnect'])) {
 			echo "Clossing session and redirecting to start page";

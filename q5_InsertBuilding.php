@@ -13,7 +13,12 @@
 		//header('Location: index.php');
 		//die();
 	}
+
+
+  $BID =$_GET['GetID'];
+
 ?>
+
 
 <html>
 <head>
@@ -37,35 +42,50 @@
     </table>
 	<hr>
 
-	<?php
+<?php
+if(isset($_POST['Query5_Insert_B'])) {
 	echo "Connecting to SQL server (" . $serverName . ")<br/>";
 	echo "Database: " . $connectionOptions[Database] . ", SQL User: " . $connectionOptions[Uid] . "<br/>";
 	//echo "Pass: " . $connectionOptions[PWD] . "<br/>";
 
 	//Establishes the connection
 	$conn = sqlsrv_connect($serverName, $connectionOptions);
+ //Read Query
+ $tsql = "{call Q5InsertBuilding(?,?,?,?,?,?,?,?)}";
 
-	//Read Stored proc with param
-	$tsql = "{call Q21(?,?)}";
-	//echo "Executing query: " . $tsql . ") with parameter " . $_POST["fingerprint_q13"] . "<br/>";
 
-	// Getting parameter from the http call and setting it for the SQL call
-	$params = array(
-			array($_POST["fid_q21"], SQLSRV_PARAM_IN),
-           array($_POST["x_q21"], SQLSRV_PARAM_IN)
-					);
 
-	$getResults= sqlsrv_query($conn, $tsql, $params);
-	echo ("Results:<br/>");
+
+  // Getting parameter from the http call and setting it for the SQL call
+	 $params = array(
+     		array($_POST["b1"], SQLSRV_PARAM_IN),
+	  	 array($_POST["b2"], SQLSRV_PARAM_IN),
+		 array($_POST["b3"], SQLSRV_PARAM_IN),
+     		array($_POST["b4"], SQLSRV_PARAM_IN),
+		 array(	$_POST["b5"], SQLSRV_PARAM_IN),
+     		array(	$_POST["b6"], SQLSRV_PARAM_IN),
+		array(	date('Y-m-d h:m:s',strtotime($_POST["b7"])), SQLSRV_PARAM_IN),
+		array(	$_POST["b8"], SQLSRV_PARAM_IN)
+      		
+
+		);
+
+
+	echo "Executing query: " . $tsql . ")<br/>";
+	 $getResults= sqlsrv_query($conn, $tsql, $params);
+
 	if ($getResults == FALSE)
 		die(FormatErrors(sqlsrv_errors()));
 
+
 	PrintResultSet($getResults);
+
 	/* Free query  resources. */
 	sqlsrv_free_stmt($getResults);
 
 	/* Free connection resources. */
 	sqlsrv_close( $conn);
+
 
 	function PrintResultSet ($resultSet) {
 		echo ("<table><tr >");
@@ -100,10 +120,9 @@
 			echo "Message: ".$error['message']."";
 		}
 	}
-
+}//to if p evales
 	?>
 
-	<hr>
 	<?php
 		if(isset($_POST['disconnect'])) {
 			echo "Clossing session and redirecting to start page";
@@ -113,10 +132,29 @@
 		}
 	?>
 
-	<form method="post">
-		<input type="submit" name="disconnect" value="Disconnect"/>
-		<input type="submit" value="Menu" formaction="home.php">
-	</form>
+ <h2><b>Insert Bulding in Fingerprint = <?php echo $BID?></h2><br>
+<form method='post'>
 
-</body>
-</html>
+   <strong>Building Code:</strong> <input type="text" name="b1" maxlength="10" required><br>
+	  <strong>Build ID:</strong> <input type="number" name="b2" required><br>
+		 <strong>X:</strong> <input type="text" name="b3"  required><br>
+	 <strong>Y:</strong><input type="text" name="b4"  required><br>
+   <strong>Address:</strong><input type="text" name="b5"  required><br>
+ <strong>Small Description:</strong><input type="text" name="b6" maxlength="280" required><br>
+<strong>Date of Register:</strong><input type="date" name="b7" required><br>
+<strong>Owner:</strong><input type="text" name="b8" maxlength="50"><br>
+
+
+			 <br><input type="submit" name="Query5_Insert_B"/>
+		 </form>
+
+
+
+ <hr>
+	 	<form method="post">
+	 		<input type="submit" name="disconnect" value="Disconnect"/>
+	 		<input type="submit" value="Menu" formaction="connect.php">
+	 	</form>
+
+	 </body>
+	 </html>

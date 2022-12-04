@@ -13,7 +13,11 @@
 		//header('Location: index.php');
 		//die();
 	}
+  $C_ID = $_GET['GetID'];
+
+
 ?>
+
 
 <html>
 <head>
@@ -36,6 +40,10 @@
 	</tr>
     </table>
 	<hr>
+  <h2>View Buildings in CampusID = <?php echo $C_ID?></h2>
+
+
+
 
 	<?php
 	echo "Connecting to SQL server (" . $serverName . ")<br/>";
@@ -45,27 +53,45 @@
 	//Establishes the connection
 	$conn = sqlsrv_connect($serverName, $connectionOptions);
 
-	//Read Stored proc with param
-	$tsql = "{call Q21(?,?)}";
-	//echo "Executing query: " . $tsql . ") with parameter " . $_POST["fingerprint_q13"] . "<br/>";
+	//Read Query
 
-	// Getting parameter from the http call and setting it for the SQL call
-	$params = array(
-			array($_POST["fid_q21"], SQLSRV_PARAM_IN),
-           array($_POST["x_q21"], SQLSRV_PARAM_IN)
-					);
+	$tsql=   "SELECT B.BCode as [Building Code],B.BuildID,B.X,B.Y,B.[Address],B.Small_Description AS [Small Description],
+CAST(B.[Date_Of_Register] AS VARCHAR(12)) as [Date of Register], B.Owner
+FROM Building B INNER JOIN Campus C ON C.CampusID = $C_ID
+ORDER BY B.BuildID,B.BCode,B.[Small_Description]" ;
 
-	$getResults= sqlsrv_query($conn, $tsql, $params);
-	echo ("Results:<br/>");
+
+	//echo "Executing query: " . $tsql . ") without any parameter<br/>";
+	$getResults= sqlsrv_query($conn, $tsql);
+	echo "Results:<br/>";
 	if ($getResults == FALSE)
 		die(FormatErrors(sqlsrv_errors()));
 
 	PrintResultSet($getResults);
+
 	/* Free query  resources. */
 	sqlsrv_free_stmt($getResults);
 
 	/* Free connection resources. */
 	sqlsrv_close( $conn);
+
+	/*
+	function PrintResultSet ($resultSet) {
+		while ($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)) {
+			$newRow = true;
+			foreach($row as $col){
+				if ($newRow) {
+					$newRow = false;
+					echo (is_null($col) ? "Null" : $col);
+				} else {
+					echo (", ".(is_null($col) ? "Null" : $col));
+				}
+			}
+			echo("<br/>");
+		}
+		echo ("<table><tr><td>---</td></tr></table>");
+	}
+	*/
 
 	function PrintResultSet ($resultSet) {
 		echo ("<table><tr >");
@@ -75,18 +101,37 @@
 			echo $fieldMetadata["Name"];
 			echo ("</th>");
 		}
+
+		echo("<th>Delete</th>");
+
 		echo ("</tr>");
+
 
 		while ($row = sqlsrv_fetch_array($resultSet, SQLSRV_FETCH_ASSOC)) {
 			echo ("<tr>");
+
 			foreach($row as $col){
+
 				echo ("<td>");
 				echo (is_null($col) ? "Null" : $col);
 				echo ("</td>");
 			}
-			echo ("</tr>");
+			//esu ta evales
+
+		$BID= $row['BuildID'];
+
+           	echo("<td><a href='q5_DeleteBuilding.php?GetID=$BID'>Delete</a></td>");//esu to evales
+
+
 		}
+
+
 		echo ("</table>");
+      echo("<br>");
+
+ 
+  	  $C_ID = $_GET['GetID'];
+      echo("<a href='q5_InsertBuilding.php?GetID=$CID'>Insert new Object</a>");//esu to evales
 	}
 
 	function FormatErrors( $errors ){
@@ -101,9 +146,14 @@
 		}
 	}
 
+
+
+
 	?>
 
+
 	<hr>
+
 	<?php
 		if(isset($_POST['disconnect'])) {
 			echo "Clossing session and redirecting to start page";
@@ -115,7 +165,7 @@
 
 	<form method="post">
 		<input type="submit" name="disconnect" value="Disconnect"/>
-		<input type="submit" value="Menu" formaction="home.php">
+		<input type="submit" value="Menu" formaction="connect.php">
 	</form>
 
 </body>
