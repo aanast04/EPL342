@@ -136,63 +136,64 @@ if(isset($_SESSION["serverName"]) && isset($_SESSION["connectionOptions"])) {
   	<a>Query 13 </a>
 	  <form action="q13.php" method="post">
   		</a>(Finding common object types)<br>
-  		Fingerprint: <input type="text" name="fingerprint_q13" placeholder = "FINGERPRINT">
+  		Fingerprint ID: <input type="number" name="fingerprint_q13" placeholder = "FINGERPRINT" required>
   		<input type="submit" name="Query 13">
   	</form><br>
   	<a>Query 14</a>
 	  <form action="q14.php" method="post">
   		</a> (Finding the k object types with the fewest participants)<br>
-  		Number K: <input type="number" name="k_q14" placeholder = "NUMBER K">
+  		Number k <input type="number" name="k_q14" placeholder = "NUMBER K" required>
   		<input type="submit" name="Query 14">
   	</form><br>
   	<a href="q15.php">Query 15 (Types of objects found in each fingerprint)</a><br><br>
   	<a>Query 16 </a>
 	  <form action="q16.php" method="post">
   		</a>(Find multiple objects within a bounding box)<br>
-  		Type: <input type="text" name="type_q16" placeholder = "TYPE">
-		X1: <input type="number" name="x1_q16" placeholder = "X1">
-		X2: <input type="number" name="x2_q16" placeholder = "X2">
-		Y1: <input type="number" name="y1_q16" placeholder = "Y1">
-		Y2: <input type="number" name="y2_q16" placeholder = "Y2">
+  		Type ID: <input type="number" name="type_q16" placeholder = "TYPE">
+		X1: <input type="text" name="x1_q16" placeholder = "X1" required>
+		X2: <input type="text" name="x2_q16" placeholder = "X2" required>
+		Y1: <input type="text" name="y1_q16" placeholder = "Y1" required>
+		Y2: <input type="text" name="y2_q16" placeholder = "Y2" required>
   		<input type="submit" name="Query 16">
   	</form><br>
   	<a>Query 17 </a><br><br>
 		<form action="q17.php" method="post">
   		</a>(Find building bounding box)<br>
-  		Building Code: <input type="text" name="Building_Code_q17" placeholder = "Building Code">
+  		Building ID: <input type="number" name="Building_Code_q17" placeholder = "Building Code" required>
 			<input type="submit" name="Query 17">
   	</form><br>
   	<a>Query 18 </a>
 	  <form action="q18.php" method="post">
   		</a>(Find nearest (Nearest Neighbor - NN) POI ( Point Of Interest))<br>
-		X: <input type="number" name="x_q18" placeholder = "X">
-		Y: <input type="number" name="y_q18" placeholder = "Y">
-		Floor Number: <input type="number" name="floor_number_q18" placeholder = "Floor Number">
+		X: <input type="text" name="x_q18" placeholder = "X" required>
+		Y: <input type="text" name="y_q18" placeholder = "Y" required>
+		Floor Number: <input type="number" name="floor_number_q18" placeholder = "Floor Number" required>
   		<input type="submit" name="Query 18">
 		  </form><br><br>
   	<a>Query 19 </a><br>
 	  <form action="q19.php" method="post">
   		</a>(Find k nearest (k Nearest Neighbor - kNN) POIs ( Points of Interest ))<br>
-		Number K: <input type="number" name="k_q19" placeholder = "NUMBER K">
-		X: <input type="number" name="x_q19" placeholder = "X">
-		Y: <input type="number" name="y_q19" placeholder = "Y">
-		Floor Number: <input type="number" name="floor_number_q19" placeholder = "Floor Number">
+		Number k: <input type="number" name="k_q19" placeholder = "NUMBER K" required>
+		X: <input type="text" name="x_q19" placeholder = "X" required>
+		Y: <input type="text" name="y_q19" placeholder = "Y" required>
+		Floor Number: <input type="number" name="floor_number_q19" placeholder = "Floor Number" required>
   		<input type="submit" name="Query 19">
 		  </form><br><br>
   	<a>Query 20 </a><br>
 	  <form action="q20.php" method="post">
   		</a>(Find all k nearest (All k Nearest Neighbor - AkNN) POIs of one floor)<br>
-		Number K: <input type="number" name="k_q20" placeholder = "NUMBER K">
-		Floor Number: <input type="number" name="floor_number_q20" placeholder = "Floor Number">
-  		<input type="submit" name="Query 20">
+		Number K: <input type="number" name="k_q20" placeholder = "NUMBER K" required>
+		Floor Number: <input type="number" name="floor_number_q20" placeholder = "Floor Number" required>
+  		<input type="submit" name="Query 20" >
 		  </form><br>
   	<a>Query 21 </a><br>
 		<form action="q21.php" method="post">
   		</a>(Total number of fingerprint route objects)<br>
-		Fingerprint ID: <input type="number" name="fid_q21" placeholder = "Fingerprint ID">
-		X: <input type="number" name="x_q21" placeholder = "X">
-  		<input type="submit" name="Query 21">
-		  </form><br><br>
+		Fingerprint ID: <input type="number" name="fid_q21" placeholder = "Fingerprint ID" required>
+		X: <input type="text" name="x_q21" placeholder = "X" required>
+  		<input type="submit" name="Query 21" >
+		  </form><br>
+<br>
 
 
   	<hr>

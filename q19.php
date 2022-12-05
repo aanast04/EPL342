@@ -46,7 +46,7 @@
 	$conn = sqlsrv_connect($serverName, $connectionOptions);
 
 	//Read Stored proc with param
-	$tsql = "{call Q16(?,?,?,?)}";
+	$tsql = "{call Q19(?,?,?,?)}";
 	//echo "Executing query: " . $tsql . ") with parameter " . $_POST["fingerprint_q13"] . "<br/>";
 
 	// Getting parameter from the http call and setting it for the SQL call

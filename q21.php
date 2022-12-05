@@ -51,8 +51,10 @@
 
 	// Getting parameter from the http call and setting it for the SQL call
 	$params = array(
-			array($_POST["fid_q21"], SQLSRV_PARAM_IN),
+			
+           array($_POST["fid_q21"], SQLSRV_PARAM_IN),
            array($_POST["x_q21"], SQLSRV_PARAM_IN)
+	
 					);
 
 	$getResults= sqlsrv_query($conn, $tsql, $params);

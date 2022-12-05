@@ -51,9 +51,10 @@
 
 	// Getting parameter from the http call and setting it for the SQL call
 	$params = array(
-			array($_POST["floor_number_q18"], SQLSRV_PARAM_IN),
+			
            array($_POST["x_q18"], SQLSRV_PARAM_IN),
-           array($_POST["y_q18"], SQLSRV_PARAM_IN)
+           array($_POST["y_q18"], SQLSRV_PARAM_IN),
+	array($_POST["floor_number_q18"], SQLSRV_PARAM_IN)
 					);
 
 	$getResults= sqlsrv_query($conn, $tsql, $params);
